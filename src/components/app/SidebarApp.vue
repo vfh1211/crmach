@@ -14,7 +14,7 @@ export default {
   data: () => ({
     links: [
       { title: localizeFilter('Home'), url: '/', exact: true },
-      { title: localizeFilter('Menu_History'), url: '/history' },
+      { title: localizeFilter('Balance_Sheet'), url: '/balanceSheet' },
       { title: localizeFilter('Menu_New_Fees'), url: '/record' },
       { title: localizeFilter('Menu_Students'), url: '/students' },
       { title: localizeFilter('Menu_Contract'), url: '/contract' }

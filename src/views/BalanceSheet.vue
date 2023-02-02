@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-title">
-      <h3> {{ 'Menu_History' | localize }} </h3>
+      <h3> {{ 'Balance_Sheet' | localize }} </h3>
     </div>
 
     <a class="waves-effect waves-light btn" @click="generatePDF()">{{ 'Download_PDF' | localize }}</a>
@@ -47,10 +47,10 @@ import 'jspdf-autotable'
 import dataFilter from '../../filters/date.filter'
 
 export default {
-  name: 'historyView',
+  name: 'balanceSheet',
   metaInfo () {
     return {
-      title: this.$title('Menu_History')
+      title: this.$title('Balance_Sheet')
     }
   },
   data: () => ({

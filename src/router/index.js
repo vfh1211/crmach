@@ -50,10 +50,10 @@ const router = new VueRouter({
       component: () => import('../views/UpdateStudentView.vue')
     },
     {
-      path: '/history',
+      path: '/balanceSheet',
       meta: { layout: 'main', auth: true },
-      name: 'history',
-      component: () => import('../views/HistoryView.vue')
+      name: 'balanceSheet',
+      component: () => import('../views/BalanceSheet.vue')
     },
     {
       path: '/profile',
