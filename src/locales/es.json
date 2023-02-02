@@ -78,6 +78,7 @@
   "Message_HeightValid": "Altura Válido",
   "Message_WeightRequired": "Peso requerido",
   "Message_maritalStatus": "Seleccionar estado civil",
+  "updateBalance_done": "Actualización de saldo realizada",
   "Message_WeightValid": "Peso Válido",
   "Message_ColorBeltRequired": "Cinturón de color requerido",
   "Message_TelRequired": "Tel. Requerido",
@@ -184,5 +185,7 @@
   "dating": "Citas",
   "other": "Otro",
   "Your_MaritalStatus": "Su estado civil",
-  "MaritalStatus": "Estado Civil"
+  "MaritalStatus": "Estado Civil",
+  "Update_balance": "Actualizar saldo",
+  "Correct_balance": "Modificar saldo"
 }

@@ -1,13 +1,42 @@
 <template>
   <div>
-    <div class="page-title">
-      <h3> {{ 'Balance_Sheet' | localize }} </h3>
+    <div class="row">
+      <div class="col s12 m12">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">{{ 'Balance_Sheet' | localize }}</span>
+            <h3 class="center-align">
+              <span v-if="!balance"> {{ ''}}</span>
+              <span v-else> {{ balance | currency }}</span>
+            </h3>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <a class="waves-effect waves-light btn" @click="generatePDF()">{{ 'Download_PDF' | localize }}</a>
+    <div class="row">
+      <div class="col s2 m2">
+        <a class="btn-large waves-effect waves-light" @click="updateBalance()">{{
+          'Update_balance' |
+            localize
+        }}</a>
+      </div>
+      <div class="col s2 m2">
+        <a class="btn-large waves-effect waves-light" @click="showModal = true">{{
+          'Correct_balance' |
+            localize
+        }}</a>
+        <CorrectBalance v-if="showModal" @close="showModal = false" />
+      </div>
+      <div class="col s3 m3">
+        <a class="btn-large waves-effect waves-light" @click="generatePDF()">{{
+          'Download_PDF' |
+            localize
+        }}</a>
+      </div>
+    </div>
 
     <LoaderApp v-if="loading" />
-
     <table id="table">
       <thead>
         <tr>
@@ -41,7 +70,8 @@
   </div>
 </template>
 <script>
-
+import localizeFilter from '../../filters/localize.filter'
+import CorrectBalance from '../components/ModalWindow/CorrectBalance.vue'
 import JsPDF from 'jspdf'
 import 'jspdf-autotable'
 import dataFilter from '../../filters/date.filter'
@@ -53,18 +83,36 @@ export default {
       title: this.$title('Balance_Sheet')
     }
   },
+  components: {
+    CorrectBalance
+  },
   data: () => ({
+    showModal: false,
     payments: [],
+    balance: 0,
     dataToPdf: [],
     loading: false,
     ascending: true,
     sortBy: ''
   }),
   async mounted () {
+    this.balance = await this.$store.dispatch('fetchBalance')
     this.payments = await this.$store.dispatch('fetchPayment')
   },
 
   methods: {
+    openModal () {
+      this.showModal = true
+    },
+    async updateBalance () {
+      this.balance = this.payments.reduce((acc, payment) => acc + payment.payment.payment, 0)
+      try {
+        await this.$store.dispatch('updateBalance', this.balance)
+        this.$message(localizeFilter('updateBalance_done'))
+      } catch (e) {
+        console.error(e)
+      }
+    },
     generatePDF () {
       const originalDates = this.payments.map(p => p.payment.date)
       const pdf = new JsPDF()

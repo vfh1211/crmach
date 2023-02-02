@@ -3,6 +3,24 @@ import firebase from 'firebase/app'
 export default {
 
   actions: {
+
+    async fetchBalance ({ dispatch, commit }) {
+      try {
+        const uid = await dispatch('getUid')
+        const balance = (await firebase.database().ref(`/users/${uid}/info/balance`).once('value')).val()
+        return balance
+      } catch (e) { commit('setError', e); throw e }
+    },
+
+    async updateBalance ({ dispatch, commit }, balance) {
+      try {
+        const uid = await dispatch('getUid')
+        await firebase.database().ref(`/users/${uid}/info/balance`).set(balance)
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
     async newPayment ({ dispatch, commit }, payment) {
       try {
         const uid = await dispatch('getUid')

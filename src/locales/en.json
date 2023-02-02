@@ -25,6 +25,7 @@
   "Message_MinLength": "Minium length is",
   "Message_maritalStatus": "Select marital status",
   "Student_HasBeenCreated": "A new student has been added to the database",
+  "updateBalance_done": "Update balance done",
   "Category_HasBeenUpdated": "Category has been updated",
   "SelectStudent": "Select student",
   "Amount": "Amount",
@@ -184,5 +185,7 @@
   "dating": "Dating",
   "other": "Other",
   "Your_MaritalStatus": "Your Marital Status",
-  "MaritalStatus": "Marital Status"
+  "MaritalStatus": "Marital Status",
+  "Update_balance": "Refresh balance",
+  "Correct_balance": "Correct balance"
 }
