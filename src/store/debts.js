@@ -1,21 +1,53 @@
 import firebase from 'firebase/app'
 
 export default {
-
+  state: {
+    balance: {}
+  },
+  mutations: {
+    updateBalance (state, balance) {
+      state.balance = balance
+    }
+  },
   actions: {
 
     async fetchBalance ({ dispatch, commit }) {
       try {
         const uid = await dispatch('getUid')
-        const balance = (await firebase.database().ref(`/users/${uid}/info/balance`).once('value')).val()
-        return balance
-      } catch (e) { commit('setError', e); throw e }
+        const correctionValueRef = firebase.database().ref(`/users/${uid}/info/balance`)
+        return new Promise((resolve, reject) => {
+          correctionValueRef.on('value', snapshot => {
+            const balance = snapshot.val() || {}
+            commit('updateBalance', balance)
+            resolve(balance)
+          })
+        })
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
     },
-
     async updateBalance ({ dispatch, commit }, balance) {
       try {
         const uid = await dispatch('getUid')
-        await firebase.database().ref(`/users/${uid}/info/balance`).set(balance)
+        return await firebase.database().ref(`/users/${uid}/info/balance`).set(balance)
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+
+    async fetchBalanceAdjustment ({ dispatch, commit }) {
+      try {
+        const uid = await dispatch('getUid')
+        const balanceAdjustment = (await firebase.database().ref(`/users/${uid}/balanceAdjustment`).once('value')).val() || {}
+        return Object.keys(balanceAdjustment).map(key => ({ ...balanceAdjustment[key], id: key }))
+      } catch (e) { commit('setError', e); throw e }
+    },
+    async newCorrectBalance ({ dispatch, commit }, corrected) {
+      try {
+        const uid = await dispatch('getUid')
+        return await firebase.database().ref(`/users/${uid}/balanceAdjustment`).push({ corrected })
       } catch (e) {
         commit('setError', e)
         throw e

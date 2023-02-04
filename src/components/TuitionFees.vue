@@ -173,7 +173,7 @@ export default {
           { studentId, paymentStudent })
         await this.$store.dispatch('updateInfoStudent', { studentId, dateNextPayment })
         this.$message(localizeFilter('Payment_has_been_made'))
-        this.$router.push('/history')
+        this.$router.push('/students')
         this.$v.reset()
       } catch (e) { }
     }

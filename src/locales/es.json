@@ -171,6 +171,8 @@
   "PhotoStudent": "Foto Estudiante",
   "OpenInfoStudent": "Editar información",
   "OpenStudentFees": "Pagos de estudiantes",
+  "Increase_the_balance": "Aumentar el saldo",
+  "Reduce_the_balance": "Reducir el saldo",
   "Home_page_img": "Página de inicio img",
   "Profile_information_updated": "Información de perfil actualizada ",
   "student_break_from_classes": "El estudiante se tomó un descanso de las clases",
@@ -187,5 +189,9 @@
   "Your_MaritalStatus": "Su estado civil",
   "MaritalStatus": "Estado Civil",
   "Update_balance": "Actualizar saldo",
-  "Correct_balance": "Modificar saldo"
+  "Correct_balance": "Modificar saldo",
+  "Reason_for_adjustment": "Motivo del ajuste",
+  "cancellation": "cancelación",
+  "accepted": "aceptado",
+  "correctBalance": "Se ha realizado un cambio de saldo en la base, actualice el saldo"
 }

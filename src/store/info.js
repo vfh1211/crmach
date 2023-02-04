@@ -2,11 +2,15 @@ import firebase from 'firebase/app'
 
 export default {
   state: {
-    info: {}
+    info: {},
+    uid: ''
   },
   mutations: {
     setInfo (state, info) {
       state.info = info
+    },
+    setUid (state, uid) {
+      state.uid = uid
     },
     clearInfo (state) {
       state.info = { locale: state.info.locale }
@@ -34,6 +38,7 @@ export default {
     async fetchInfo ({ dispatch, commit }) {
       try {
         const uid = await dispatch('getUid')
+        commit('setUid', uid)
         const info = (await firebase
           .database()
           .ref(`/users/${uid}/info`)
@@ -46,6 +51,7 @@ export default {
     }
   },
   getters: {
-    info: s => s.info
+    info: s => s.info,
+    getUid: s => s.uid
   }
 }

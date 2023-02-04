@@ -171,6 +171,8 @@
   "PhotoStudent": "Photo Student",
   "OpenInfoStudent": "Edit info",
   "OpenStudentFees": "Student fees",
+  "Increase_the_balance": "Increase the balance",
+  "Reduce_the_balance": "Reduce the balance",
   "Home_page_img": "Home page img",
   "Profile_information_updated": "Profile information updated",
   "student_break_from_classes": "The student took a break from classes",
@@ -187,5 +189,9 @@
   "Your_MaritalStatus": "Your Marital Status",
   "MaritalStatus": "Marital Status",
   "Update_balance": "Refresh balance",
-  "Correct_balance": "Correct balance"
+  "Correct_balance": "Correct balance",
+  "Reason_for_adjustment": "Reason for adjustment",
+  "cancellation": "cancellation",
+  "accepted": "accepted",
+  "correctBalance": "Balance change was made in the base, update the balance"
 }
