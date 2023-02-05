@@ -113,6 +113,8 @@ export default {
     payment: { required, minValue: minValue(500) }
   },
   async mounted () {
+    this.currentBalance = Number(await this.$store.dispatch('fetchBalance'))
+    this.currentBalance = isNaN(this.currentBalance) ? 0 : this.currentBalance
     this.students = await this.$store.dispatch('fetchStudents')
     this.loading = false
     if (this.students.length) {
@@ -172,6 +174,11 @@ export default {
         await this.$store.dispatch('newPaymentStudent',
           { studentId, paymentStudent })
         await this.$store.dispatch('updateInfoStudent', { studentId, dateNextPayment })
+
+        const currentBalance = isNaN(Number(this.currentBalance)) ? 0 : Number(this.currentBalance)
+        const correctionValue = isNaN(Number(this.payment)) ? 0 : Number(this.payment)
+        const balance = currentBalance + correctionValue
+        await this.$store.dispatch('updateBalance', balance)
         this.$message(localizeFilter('Payment_has_been_made'))
         this.$router.push('/students')
         this.$v.reset()

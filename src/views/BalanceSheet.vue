@@ -16,23 +16,29 @@
 
     <div class="row">
       <div class="col s2 m2">
-        <a class="btn-large waves-effect waves-light" @click="updateBalance()" :disabled="showModal">{{
-          'Update_balance' |
-            localize
-        }}</a>
+        <button class="btn-large waves-effect waves-light" @click="updateParentBalance()"
+          :disabled="showModal || noUpdateParentBalance">{{
+            'Update_balance' | localize
+          }}</button>
       </div>
       <div class="col s2 m2">
-        <a class="btn-large waves-effect waves-light" @click="showModal = true" :disabled="showModal">{{
+        <button class="btn-large waves-effect waves-light" @click="showModal = true" :disabled="showModal">{{
           'Correct_balance' |
             localize
-        }}</a>
+        }}</button>
         <CorrectBalance v-if="showModal" @close="closeModal" @update-balance="updateBalance" />
       </div>
       <div class="col s3 m3">
-        <a class="btn-large waves-effect waves-light" @click="generatePDF()" :disabled="showModal">{{
-          'Download_PDF' |
-            localize
-        }}</a>
+        <button class="btn-large waves-effect waves-light" @click="$router.push('/record/')" :disabled="showModal">
+          {{
+            'student_payment' |
+              localize
+          }}</button>
+      </div>
+      <div class="col s3 m3">
+        <button class="btn-large waves-effect waves-light" @click="generatePDF()" :disabled="showModal">{{
+          'Download_PDF' | localize
+        }}</button>
       </div>
     </div>
 
@@ -95,7 +101,8 @@ export default {
     dataToPdf: [],
     loading: false,
     ascending: true,
-    sortBy: ''
+    sortBy: '',
+    noUpdateParentBalance: false
   }),
   async mounted () {
     this.balance = await this.$store.dispatch('fetchBalance')
@@ -110,6 +117,7 @@ export default {
     updateBalance (balance) {
       this.balance = balance
       this.showModal = false
+      this.noUpdateParentBalance = true
     },
     openModal () {
       this.showModal = true
@@ -123,59 +131,59 @@ export default {
         this.$message(localizeFilter('updateBalance_done'))
       } catch (e) {
       }
+    },
+    sortedPayments (sortBy) {
+      this.ascending = !this.ascending
+      this.payments.sort((a, b) => {
+        if (sortBy === 'date') {
+          // sort by date
+          if (this.ascending) {
+            // sort in ascending order
+            if (a.payment.date < b.payment.date) return -1
+            if (a.payment.date > b.payment.date) return 1
+            return 0
+          } else {
+            // sort in descending order
+            if (a.payment.date > b.payment.date) return -1
+            if (a.payment.date < b.payment.date) return 1
+            return 0
+          }
+        } else {
+          // sort by student name
+          if (this.ascending) {
+            // sort in ascending order
+            if (a.payment.nameStudent < b.payment.nameStudent) return -1
+            if (a.payment.nameStudent > b.payment.nameStudent) return 1
+            return 0
+          } else {
+            // sort in descending order
+            if (a.payment.nameStudent > b.payment.nameStudent) return -1
+            if (a.payment.nameStudent < b.payment.nameStudent) return 1
+            return 0
+          }
+        }
+      })
+    },
+    generatePDF () {
+      const originalDates = this.payments.map(p => p.payment.date)
+      const pdf = new JsPDF()
+      this.payments.forEach((payment) => {
+        payment.payment.date = dataFilter(payment.payment.date)
+      })
+      pdf.autoTable({
+        head: [['Date payment', 'Student', '', 'Payment amount']],
+        body: this.payments.map(payment => [payment.payment.date, payment.payment.nameStudent, '', payment.payment.payment])
+      })
+      pdf.save('table.pdf')
+      // revert back to original formatting for table
+      this.payments.forEach((payment, i) => {
+        payment.payment.date = originalDates[i]
+      })
     }
   },
   created () {
     this.$on('update-balance', (balance) => {
       this.updateBalance(balance)
-    })
-  },
-  generatePDF () {
-    const originalDates = this.payments.map(p => p.payment.date)
-    const pdf = new JsPDF()
-    this.payments.forEach((payment) => {
-      payment.payment.date = dataFilter(payment.payment.date)
-    })
-    pdf.autoTable({
-      head: [['Date payment', 'Student', '', 'Payment amount']],
-      body: this.payments.map(payment => [payment.payment.date, payment.payment.nameStudent, '', payment.payment.payment])
-    })
-    pdf.save('table.pdf')
-    // revert back to original formatting for table
-    this.payments.forEach((payment, i) => {
-      payment.payment.date = originalDates[i]
-    })
-  },
-  sortedPayments (sortBy) {
-    this.ascending = !this.ascending
-    this.payments.sort((a, b) => {
-      if (sortBy === 'date') {
-        // sort by date
-        if (this.ascending) {
-          // sort in ascending order
-          if (a.payment.date < b.payment.date) return -1
-          if (a.payment.date > b.payment.date) return 1
-          return 0
-        } else {
-          // sort in descending order
-          if (a.payment.date > b.payment.date) return -1
-          if (a.payment.date < b.payment.date) return 1
-          return 0
-        }
-      } else {
-        // sort by student name
-        if (this.ascending) {
-          // sort in ascending order
-          if (a.payment.nameStudent < b.payment.nameStudent) return -1
-          if (a.payment.nameStudent > b.payment.nameStudent) return 1
-          return 0
-        } else {
-          // sort in descending order
-          if (a.payment.nameStudent > b.payment.nameStudent) return -1
-          if (a.payment.nameStudent < b.payment.nameStudent) return 1
-          return 0
-        }
-      }
     })
   }
 }

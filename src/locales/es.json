@@ -15,7 +15,7 @@
   "Balance_Sheet": "Saldo",
   "Menu_Planning": "Planificación",
   "Menu_inventory": "Inventario",
-  "Menu_New_Fees": "Nuevas tarifas",
+  "Menu_New_Fees": "Nuevas tasas estudiantiles",
   "Menu_Contract": "Contrato",
   "Menu_Students": "Estudiantes",
   "Title": "Título",
@@ -193,5 +193,6 @@
   "Reason_for_adjustment": "Motivo del ajuste",
   "cancellation": "cancelación",
   "accepted": "aceptado",
-  "correctBalance": "Se ha realizado un cambio de saldo en la base, actualice el saldo"
+  "correctBalance": "Se ha realizado un cambio de saldo en la base",
+  "student_payment": "efectuar el pago del estudiante"
 }

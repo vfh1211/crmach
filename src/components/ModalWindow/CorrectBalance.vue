@@ -48,7 +48,8 @@ export default {
       idAdmin: '',
       date: '',
       initialBalance: 0,
-      balance: 0
+      balance: 0,
+      noUpdateParentBalance: false
     }
   },
   async mounted () {
@@ -82,8 +83,9 @@ export default {
         const currentBalance = isNaN(Number(this.currentBalance)) ? 0 : Number(this.currentBalance)
         const correctionValue = isNaN(Number(this.correctionValue)) ? 0 : Number(this.correctionValue)
         const balance = currentBalance + correctionValue
+        const noUpdateParentBalance = true
         await this.$store.dispatch('updateBalance', balance)
-        this.$emit('update-balance', balance, 'close')
+        this.$emit('update-balance', balance, noUpdateParentBalance, 'close')
         this.$message(localizeFilter('correctBalance'))
       } catch (e) {
         this.$emit('close')

@@ -15,7 +15,7 @@
   "Balance_Sheet": "Balance",
   "Menu_Planning": "Planning",
   "Menu_inventory": "Inventory",
-  "Menu_New_Fees": "New fees",
+  "Menu_New_Fees": "New Student Payment",
   "Menu_Contract": "Contract",
   "Menu_Students": "Students",
   "Title": "Title",
@@ -193,5 +193,6 @@
   "Reason_for_adjustment": "Reason for adjustment",
   "cancellation": "cancellation",
   "accepted": "accepted",
-  "correctBalance": "Balance change was made in the base, update the balance"
+  "correctBalance": "Balance change was made in the base",
+  "student_payment": "make the student payment"
 }
