@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-
     <div class="row">
       <div class="col s2 m2">
         <button class="btn-large waves-effect waves-light" @click="updateParentBalance()"
@@ -52,16 +51,16 @@
           <th @click="sortedPayments('paymentAmount')" :class="{ 'sort-active': sortBy === 'paymentAmount' }">
             <a class="waves-effect waves-orange pointer">{{ 'Payment_amount' | localize }}</a>
           </th>
-          <th @click="sortedPayments('type')" :class="{ 'sort-active': sortBy === 'type' }">
+          <th @click="sortedPayments('typePayment')" :class="{ 'sort-active': sortBy === 'typePayment' }">
             <a class="waves-effect waves-orange pointer">{{ 'Type_of_payment' | localize }}</a>
           </th>
-          <th @click="sortedPayments('nameStudent')" :class="{ 'sort-active': sortBy === 'nameStudent' }">
+          <th @click="sortedPayments('whosePayment')" :class="{ 'sort-active': sortBy === 'whosePayment' }">
             <a class="waves-effect waves-orange pointer">{{ 'Whose_payment' | localize }}</a>
           </th>
           <th @click="sortedPayments('commentary')" :class="{ 'sort-active': sortBy === 'commentary' }">
             <a class="waves-effect waves-orange pointer">{{ 'Commentary' | localize }}</a>
           </th>
-          <th @click="sortedPayments('author')" :class="{ 'sort-active': sortBy === 'author' }">
+          <th @click="sortedPayments('authorRecord')" :class="{ 'sort-active': sortBy === 'authorRecord' }">
             <a class="waves-effect waves-orange pointer">{{ 'author_of_record' | localize }}</a>
           </th>
         </tr>
@@ -168,7 +167,7 @@ export default {
             if (a.corrected.date < b.corrected.date) return 1
             return 0
           }
-        } else if (sortBy === 'nameStudent') {
+        } else if (sortBy === 'whosePayment') {
           // sort by student name
           if (this.ascending) {
             // sort in ascending order
@@ -194,7 +193,7 @@ export default {
             if (a.corrected.correctionValue < b.corrected.correctionValue) return 1
             return 0
           }
-        } else if (sortBy === 'type') {
+        } else if (sortBy === 'typePayment') {
           // sort by type of payment
           if (this.ascending) {
             // sort in ascending order
@@ -229,7 +228,7 @@ export default {
             }
             return 0
           }
-        } else if (sortBy === 'author') {
+        } else if (sortBy === 'authorRecord') {
           if (this.ascending) {
             if (a.corrected.nameAdmin && b.corrected.nameAdmin) {
               if (a.corrected.nameAdmin < b.corrected.nameAdmin) return -1
