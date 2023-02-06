@@ -46,27 +46,44 @@
     <table id="table">
       <thead>
         <tr>
-          <th @click="sortedPayments('date')" :class="{ 'sort-active': sortBy === 'date' }"><a
-              class="waves-effect waves-orange pointer">{{ 'Date_payment' | localize }}</a></th>
-          <th @click="sortedPayments('student')" :class="{ 'sort-active': sortBy === 'student' }"><a
-              class="waves-effect waves-orange pointer">{{
-                'Student' |
-                  localize
-              }}</a></th>
-          <th></th>
-          <th>{{ 'Payment_amount' | localize }}</th>
+          <th @click="sortedPayments('date')" :class="{ 'sort-active': sortBy === 'date' }">
+            <a class="waves-effect waves-orange pointer">{{ 'Date_payment' | localize }}</a>
+          </th>
+          <th @click="sortedPayments('paymentAmount')" :class="{ 'sort-active': sortBy === 'paymentAmount' }">
+            <a class="waves-effect waves-orange pointer">{{ 'Payment_amount' | localize }}</a>
+          </th>
+          <th @click="sortedPayments('type')" :class="{ 'sort-active': sortBy === 'type' }">
+            <a class="waves-effect waves-orange pointer">{{ 'Type_of_payment' | localize }}</a>
+          </th>
+          <th @click="sortedPayments('nameStudent')" :class="{ 'sort-active': sortBy === 'nameStudent' }">
+            <a class="waves-effect waves-orange pointer">{{ 'Whose_payment' | localize }}</a>
+          </th>
+          <th @click="sortedPayments('commentary')" :class="{ 'sort-active': sortBy === 'commentary' }">
+            <a class="waves-effect waves-orange pointer">{{ 'Commentary' | localize }}</a>
+          </th>
+          <th @click="sortedPayments('author')" :class="{ 'sort-active': sortBy === 'author' }">
+            <a class="waves-effect waves-orange pointer">{{ 'author_of_record' | localize }}</a>
+          </th>
         </tr>
       </thead>
 
       <tbody>
-        <tr v-for="payment of payments" :key="payment.id">
-          <td>{{ payment.payment.date | date }}</td>
-          <td>{{ payment.payment.nameStudent }}</td>
-          <td><button v-tooltip="'OpenStudentFees'" class="btn-floating"
-              @click="$router.push('/detail/' + payment.payment.studentId)" :disabled="showModal">
-              <i class="material-icons">info_outline</i>
-            </button></td>
-          <td>{{ payment.payment.payment | currency }}</td>
+        <tr v-for="corrected of dataBalance" :key="corrected.id">
+          <td>{{ corrected.corrected.date | date }}</td>
+          <td :style="{ color: corrected.corrected.correctionValue < 0 ? 'red' : 'inherit' }">
+            {{ corrected.corrected.correctionValue | currency }}</td>
+          <td>
+            <span v-if="corrected.corrected.nameStudent"> {{ 'student_fee'| localize }} </span>
+            <span v-else> {{ 'Correct_balance' | localize }} </span>
+          </td>
+          <td>
+            <span v-if="!corrected.corrected.nameStudent" class="default-color"> {{ corrected.corrected.nameAdmin }}
+              (Admin)
+            </span>
+            <span v-else> {{ corrected.corrected.nameStudent }} </span>
+          </td>
+          <td>{{ corrected.corrected.reasonAdjustment }}</td>
+          <td>{{ corrected.corrected.nameAdmin }} </td>
         </tr>
       </tbody>
     </table>
@@ -94,6 +111,7 @@ export default {
   },
   data: () => ({
     showModal: false,
+    dataBalance: [],
     payments: [],
     balanceAdjustment: [],
     balance: 0,
@@ -108,6 +126,7 @@ export default {
     this.balance = await this.$store.dispatch('fetchBalance')
     this.payments = await this.$store.dispatch('fetchPayment')
     this.balanceAdjustment = await this.$store.dispatch('fetchBalanceAdjustment')
+    this.dataBalance = await this.$store.dispatch('fetchAllData')
   },
 
   methods: {
@@ -133,37 +152,111 @@ export default {
       }
     },
     sortedPayments (sortBy) {
-      this.ascending = !this.ascending
-      this.payments.sort((a, b) => {
+      this.ascending = (this.sortBy === sortBy) ? !this.ascending : true
+      this.sortBy = sortBy
+      this.dataBalance.sort((a, b) => {
         if (sortBy === 'date') {
           // sort by date
           if (this.ascending) {
             // sort in ascending order
-            if (a.payment.date < b.payment.date) return -1
-            if (a.payment.date > b.payment.date) return 1
+            if (a.corrected.date < b.corrected.date) return -1
+            if (a.corrected.date > b.corrected.date) return 1
             return 0
           } else {
             // sort in descending order
-            if (a.payment.date > b.payment.date) return -1
-            if (a.payment.date < b.payment.date) return 1
+            if (a.corrected.date > b.corrected.date) return -1
+            if (a.corrected.date < b.corrected.date) return 1
             return 0
           }
-        } else {
+        } else if (sortBy === 'nameStudent') {
           // sort by student name
           if (this.ascending) {
             // sort in ascending order
-            if (a.payment.nameStudent < b.payment.nameStudent) return -1
-            if (a.payment.nameStudent > b.payment.nameStudent) return 1
+            if (a.corrected.nameStudent < b.corrected.nameStudent) return -1
+            if (a.corrected.nameStudent > b.corrected.nameStudent) return 1
             return 0
           } else {
             // sort in descending order
-            if (a.payment.nameStudent > b.payment.nameStudent) return -1
-            if (a.payment.nameStudent < b.payment.nameStudent) return 1
+            if (a.corrected.nameStudent > b.corrected.nameStudent) return -1
+            if (a.corrected.nameStudent < b.corrected.nameStudent) return 1
+            return 0
+          }
+        } else if (sortBy === 'paymentAmount') {
+          // sort by payment amount
+          if (this.ascending) {
+            // sort in ascending order
+            if (a.corrected.correctionValue < b.corrected.correctionValue) return -1
+            if (a.corrected.correctionValue > b.corrected.correctionValue) return 1
+            return 0
+          } else {
+            // sort in descending order
+            if (a.corrected.correctionValue > b.corrected.correctionValue) return -1
+            if (a.corrected.correctionValue < b.corrected.correctionValue) return 1
+            return 0
+          }
+        } else if (sortBy === 'type') {
+          // sort by type of payment
+          if (this.ascending) {
+            // sort in ascending order
+            if (a.corrected.nameStudent && !b.corrected.nameStudent) return -1
+            if (!a.corrected.nameStudent && b.corrected.nameStudent) return 1
+            return 0
+          } else {
+            // sort in descending order
+            if (!a.corrected.nameStudent && b.corrected.nameStudent) return -1
+            if (a.corrected.nameStudent && !b.corrected.nameStudent) return 1
+            return 0
+          }
+        } else if (sortBy === 'commentary') {
+          if (this.ascending) {
+            if (a.corrected.reasonAdjustment && b.corrected.reasonAdjustment) {
+              if (a.corrected.reasonAdjustment < b.corrected.reasonAdjustment) return -1
+              if (a.corrected.reasonAdjustment > b.corrected.reasonAdjustment) return 1
+            } else if (a.corrected.reasonAdjustment) {
+              return -1
+            } else if (b.corrected.reasonAdjustment) {
+              return 1
+            }
+            return 0
+          } else {
+            if (a.corrected.reasonAdjustment && b.corrected.reasonAdjustment) {
+              if (a.corrected.reasonAdjustment > b.corrected.reasonAdjustment) return -1
+              if (a.corrected.reasonAdjustment < b.corrected.reasonAdjustment) return 1
+            } else if (a.corrected.reasonAdjustment) {
+              return -1
+            } else if (b.corrected.reasonAdjustment) {
+              return 1
+            }
+            return 0
+          }
+        } else if (sortBy === 'author') {
+          if (this.ascending) {
+            if (a.corrected.nameAdmin && b.corrected.nameAdmin) {
+              if (a.corrected.nameAdmin < b.corrected.nameAdmin) return -1
+              if (a.corrected.nameAdmin > b.corrected.nameAdmin) return 1
+            } else if (a.corrected.nameAdmin) {
+              return -1
+            } else if (b.corrected.nameAdmin) {
+              return 1
+            }
+            return 0
+          } else {
+            if (a.corrected.nameAdmin && b.corrected.nameAdmin) {
+              if (a.corrected.nameAdmin > b.corrected.nameAdmin) return -1
+              if (a.corrected.nameAdmin < b.corrected.nameAdmin) return 1
+            } else if (a.corrected.nameAdmin) {
+              return -1
+            } else if (b.corrected.nameAdmin) {
+              return 1
+            }
             return 0
           }
         }
+        // add more conditions here for sorting by other columns
+        return 0
       })
     },
+
     generatePDF () {
       const originalDates = this.payments.map(p => p.payment.date)
       const pdf = new JsPDF()

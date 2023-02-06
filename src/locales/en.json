@@ -194,5 +194,10 @@
   "cancellation": "cancellation",
   "accepted": "accepted",
   "correctBalance": "Balance change was made in the base",
-  "student_payment": "make the student payment"
+  "student_payment": "make the student payment",
+  "Type_of_payment": "Type of payment",
+  "Whose_payment": "Whose payment",
+  "Commentary": "Commentary",
+  "author_of_record": "Author of record",
+  "student_fee": "student fee"
 }

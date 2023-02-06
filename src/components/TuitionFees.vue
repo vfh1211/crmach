@@ -161,6 +161,8 @@ export default {
           studentId: this.current,
           payment: this.payment,
           nameStudent: this.name,
+          idAdmin: this.$store.getters.getUid,
+          nameAdmin: this.$store.getters.info.name,
           date: new Date().toJSON()
         })
         const paymentStudent =

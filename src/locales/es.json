@@ -194,5 +194,10 @@
   "cancellation": "cancelación",
   "accepted": "aceptado",
   "correctBalance": "Se ha realizado un cambio de saldo en la base",
-  "student_payment": "efectuar el pago del estudiante"
+  "student_payment": "efectuar el pago del estudiante",
+  "Type_of_payment": "tipo de pago",
+  "Whose_payment": "cuyo pago",
+  "Commentary": "сomentario",
+  "author_of_record": "autor de registro",
+  "student_fee": "cuota de estudiante"
 }

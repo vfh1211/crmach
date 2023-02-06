@@ -11,6 +11,37 @@ export default {
   },
   actions: {
 
+    async fetchPaymentTemp ({ dispatch, commit }) {
+      try {
+        const uid = await dispatch('getUid')
+        const payment = (await firebase.database().ref(`/users/${uid}/payments`).once('value')).val() || {}
+        return Object.keys(payment).map(key => ({
+          id: key,
+          corrected: {
+            date: payment[key].payment.date,
+            nameStudent: payment[key].payment.nameStudent,
+            correctionValue: payment[key].payment.payment,
+            studentId: payment[key].payment.studentId,
+            idAdmin: payment[key].payment.idAdmin,
+            nameAdmin: payment[key].payment.nameAdmin
+          }
+        }))
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+    async fetchAllData ({ dispatch, commit }) {
+      try {
+        const paymentData = await dispatch('fetchPaymentTemp')
+        const balanceData = await dispatch('fetchBalanceAdjustment')
+        return [...paymentData, ...balanceData]
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+
     async fetchBalance ({ dispatch, commit }) {
       try {
         const uid = await dispatch('getUid')
