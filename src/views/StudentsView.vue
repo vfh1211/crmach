@@ -69,6 +69,7 @@
               }}</a></th>
             </tr>
           </thead>
+
           <tbody>
             <tr v-for="students of filteredStudents" :key="students.id">
               <td>
