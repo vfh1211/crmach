@@ -1,46 +1,32 @@
 <template>
   <div>
-    <div class="page-title">
-      <h3>{{ 'Balance_Sheet' | localize }}</h3>
-    </div>
     <div class="row">
       <div class="col s4">
-        <input type="text" v-model="search" :placeholder="'Whose_payment' | localize" />
+        <input type="text" v-model="searchWhosePayment" :placeholder="'Whose_payment' | localize" />
       </div>
       <div class="col s12">
         <table class="highlight">
           <thead>
             <tr>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.date')">
-                  {{ 'Date_payment' | localize }}
-                </a>
-              </th>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.correctionValue')">
-                  {{ 'Payment_amount' | localize }}
-                </a>
-              </th>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.typePayment')">
-                  {{ 'Type_of_payment' | localize }}
-                </a>
-              </th>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.whosePayment')">
-                  {{ 'Whose_payment' | localize }}
-                </a>
-              </th>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.reasonAdjustment')">
-                  {{ 'Commentary' | localize }}
-                </a>
-              </th>
-              <th>
-                <a class="waves-effect waves-orange pointer" @click="sortBy('corrected.nameAdmin')">
-                  {{ 'author_of_record' | localize }}
-                </a>
-              </th>
+              <th @click="sortBy('corrected.date')"><a class="waves-effect waves-orange pointer">{{
+                'Date_payment' |
+                  localize
+              }}</a></th>
+              <th @click="sortBy('corrected.correctionValue')"><a class="waves-effect waves-orange pointer">{{
+                'Payment_amount' | localize
+              }}</a></th>
+              <th @click="sortBy('corrected.typePayment')"><a class="waves-effect waves-orange pointer">{{
+                'Type_of_payment' | localize
+              }}</a></th>
+              <th @click="sortBy('corrected.whosePayment')"><a class="waves-effect waves-orange pointer">{{
+                'Whose_payment' | localize
+              }}</a></th>
+              <th @click="sortBy('corrected.reasonAdjustment')"><a class="waves-effect waves-orange pointer">{{
+                'Commentary' | localize
+              }}</a></th>
+              <th @click="sortBy('corrected.nameAdmin')"><a class="waves-effect waves-orange pointer">{{
+                'author_of_record' | localize
+              }}</a></th>
             </tr>
           </thead>
           <tbody v-if="dataBalance.length">
@@ -68,16 +54,21 @@ export default {
   name: 'TableBalance',
   data: () => ({
     dataBalance: [],
-    search: '',
+    searchTypePayment: '',
+    searchWhosePayment: '',
+    sortKey: 'corrected.date',
+    sortOrder: 'asc',
     ascending: true,
     sortAscending: true,
-    loading: true,
-    sortKey: 'corrected.date',
-    sortOrder: 'asc'
+    loading: true
   }),
+
   computed: {
+    filteredData () {
+      return this.dataBalance.filter(balance => balance.corrected.whosePayment.toLowerCase().includes(this.searchWhosePayment.toLowerCase()))
+    },
     sortedData () {
-      return _.orderBy(this.dataBalance, this.sortKey, this.sortOrder)
+      return _.orderBy(this.filteredData, this.sortKey, this.sortOrder)
     }
   },
   methods: {
@@ -86,7 +77,7 @@ export default {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
     }
   },
-  async mounted () {
+  mounted () {
     this.$store.dispatch('fetchAllData').then(dataBalance => {
       this.dataBalance = dataBalance.map(balance => {
         balance.corrected.typePayment = balance.corrected.nameStudent ? 'student_fee' : 'Correct_balance'
@@ -95,8 +86,6 @@ export default {
       })
       this.loading = false
     })
-    await this.$store.dispatch('fetchAllData')
-    this.loading = false
   }
 }
 </script>
