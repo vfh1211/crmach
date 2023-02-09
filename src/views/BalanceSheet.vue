@@ -34,11 +34,6 @@
               localize
           }}</button>
       </div>
-      <div class="col s3 m3">
-        <button class="btn-large waves-effect waves-light" @click="generatePDF()" :disabled="showModal">{{
-          'Download_PDF' | localize
-        }}</button>
-      </div>
     </div>
 
     <LoaderApp v-if="loading" />
@@ -52,9 +47,6 @@
 import TableBalance from '../components/TableBalance.vue'
 import localizeFilter from '../../filters/localize.filter'
 import CorrectBalance from '../components/ModalWindow/CorrectBalance.vue'
-import JsPDF from 'jspdf'
-import 'jspdf-autotable'
-import dataFilter from '../../filters/date.filter'
 export default {
   name: 'balanceSheet',
   metaInfo () {
@@ -107,27 +99,11 @@ export default {
       } catch (e) {
       }
     },
-    generatePDF () {
-      const originalDates = this.payments.map(p => p.payment.date)
-      const pdf = new JsPDF()
-      this.payments.forEach((payment) => {
-        payment.payment.date = dataFilter(payment.payment.date)
-      })
-      pdf.autoTable({
-        head: [['Date payment', 'Student', '', 'Payment amount']],
-        body: this.payments.map(payment => [payment.payment.date, payment.payment.nameStudent, '', payment.payment.payment])
-      })
-      pdf.save('table.pdf')
-      // revert back to original formatting for table
-      this.payments.forEach((payment, i) => {
-        payment.payment.date = originalDates[i]
+    created () {
+      this.$on('update-balance', (balance) => {
+        this.updateBalance(balance)
       })
     }
-  },
-  created () {
-    this.$on('update-balance', (balance) => {
-      this.updateBalance(balance)
-    })
   }
 }
 </script>
