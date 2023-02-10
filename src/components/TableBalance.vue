@@ -71,14 +71,8 @@ export default {
     loading: true
   }),
   mounted () {
-    this.$store.dispatch('fetchAllData').then(dataBalance => {
-      this.dataBalance = dataBalance.map(balance => {
-        balance.corrected.typePayment = localizeFilter(balance.corrected.nameStudent ? 'student_fee' : 'Correct_balance')
-        balance.corrected.whosePayment = balance.corrected.nameStudent ? balance.corrected.nameStudent : balance.corrected.nameAdmin + ' (Admin)'
-        return balance
-      })
-      this.loading = false
-    })
+    this.loadData()
+    this.$root.$on('data-updated', this.loadData)
   },
   computed: {
     filteredData () {
@@ -88,7 +82,26 @@ export default {
       return _.orderBy(this.filteredData, this.sortKey, this.sortOrder)
     }
   },
+  watch: {
+    dataBalance: {
+      deep: true,
+      handler () {
+        this.loadData()
+      }
+    }
+  },
   methods: {
+    loadData () {
+      this.loading = true
+      this.$store.dispatch('fetchAllData').then(dataBalance => {
+        this.dataBalance = dataBalance.map(balance => {
+          balance.corrected.typePayment = localizeFilter(balance.corrected.nameStudent ? 'student_fee' : 'Correct_balance')
+          balance.corrected.whosePayment = balance.corrected.nameStudent ? balance.corrected.nameStudent : balance.corrected.nameAdmin + ' (Admin)'
+          return balance
+        })
+        this.loading = false
+      })
+    },
     sortBy (key) {
       this.sortKey = key
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
@@ -96,14 +109,16 @@ export default {
     generatePDF () {
       const originalDates = this.sortedData.map(p => p.corrected.date)
       const pdf = new JsPDF()
+
       this.sortedData.forEach((balance) => {
-        balance.corrected.date = formatDate(balance.corrected.date)
+        balance.corrected.redactDate = (new Date(balance.corrected.date).toLocaleDateString())
       })
+
       pdf.autoTable({
         head: [
           [localizeFilter('Date_payment'), localizeFilter('Payment_amount'), localizeFilter('Type_of_payment'), localizeFilter('Whose_payment'), localizeFilter('Commentary'), localizeFilter('author_of_record')]
         ],
-        body: this.sortedData.map(balance => [balance.corrected.date, balance.corrected.correctionValue, balance.corrected.typePayment, balance.corrected.whosePayment, balance.corrected.reasonAdjustment, balance.corrected.nameAdmin])
+        body: this.sortedData.map(balance => [formatDate(balance.corrected.redactDate), balance.corrected.correctionValue, balance.corrected.typePayment, balance.corrected.whosePayment, balance.corrected.reasonAdjustment, balance.corrected.nameAdmin])
       })
       pdf.save('table.pdf')
       this.sortedData.forEach((balance, index) => {

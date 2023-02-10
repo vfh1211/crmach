@@ -96,6 +96,7 @@ export default {
       try {
         await this.$store.dispatch('updateBalance', this.balance)
         this.$message(localizeFilter('updateBalance_done'))
+        this.$root.$emit('data-updated')
       } catch (e) {
       }
     },
