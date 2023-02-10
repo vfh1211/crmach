@@ -167,6 +167,8 @@ export default {
         })
         const paymentStudent =
         {
+          idAdmin: this.$store.getters.getUid,
+          nameAdmin: this.$store.getters.info.name,
           fine: this.daysArrears * this.amountFine,
           payment: this.payment,
           date: new Date().toJSON()
