@@ -109,8 +109,8 @@
   "Make_a_payment": "Realizar un pago",
   "Debts_to_date": "Endeudamiento hasta la fecha",
   "History_of_Payments": "historia de los pagos",
-  "Date_payment": "Fecha de pago",
-  "Payment_amount": "Importe del pago",
+  "Date_payment": "Fecha de Pago",
+  "Payment_amount": "Importe del Pago",
   "Amount_of_penalty_at_the_time_of_payment": "Cuantía de la sanción en el momento del pago",
   "Payment_has_been_made": "Se ha efectuado el pago",
   "Number_of_students_in_arrears": "Número de alumnos morosos",
@@ -195,9 +195,12 @@
   "accepted": "aceptado",
   "correctBalance": "Se ha realizado un cambio de saldo en la base",
   "student_payment": "efectuar el pago del estudiante",
-  "Type_of_payment": "tipo de pago",
-  "Whose_payment": "cuyo pago",
+  "Type_of_payment": "Tipo de Pago",
+  "Whose_payment": "Cuyo Pago",
   "Commentary": "сomentario",
-  "author_of_record": "autor de registro",
-  "student_fee": "cuota de estudiante"
+  "author_of_record": "Autor de Registro",
+  "student_fee": "cuota de estudiante",
+  "From": "De inicio",
+  "To": "Fecha final",
+  "Reset_filter": "Restablecer filtro"
 }

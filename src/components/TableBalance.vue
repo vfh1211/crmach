@@ -2,11 +2,23 @@
   <div>
     <div class="row">
       <div class="col s2 m2">
-        <input type="date" v-model="searchDatePayment" />
+        <label for="start-date">{{ 'From' | localize }}</label>
+        <input type="date" id="start-date" v-model="startDate" />
       </div>
-      <div class="col s4 m4 ">
+      <div class="col s2 m2">
+        <label for="end-date">{{ 'To' | localize }}</label>
+        <input type="date" id="end-date" v-model="endDate" />
+      </div>
+      <div class="col s2 m2 ">
+        <label for="end-date">{{ 'Whose_payment' | localize }}</label>
         <input type="text" v-model="searchWhosePayment" :placeholder="'Whose_payment' | localize" />
       </div>
+
+      <div class="col s2">
+        <button v-tooltip="'Reset_filter'" class="btn-floating btn waves-effect waves-light red" @click="resetFilters"><i
+            class="material-icons">clear</i></button>
+      </div>
+
       <div class="col s10 m10">
         <button class="btn-large waves-effect waves-light" @click="generatePDF()">{{
           'Download_PDF' | localize
@@ -38,7 +50,7 @@
           </tr>
         </thead>
         <tbody v-if="dataBalance.length">
-          <tr v-for="balance of sortedData" :key="balance.id">
+          <tr v-for="balance in sortedData" :key="balance.id">
             <td>{{ balance.corrected.date | date }}</td>
             <td :style="{ color: balance.corrected.correctionValue < 0 ? 'red' : 'inherit' }">
               {{ balance.corrected.correctionValue | currency }}
@@ -60,11 +72,12 @@ import JsPDF from 'jspdf'
 import 'jspdf-autotable'
 import formatDate from '../../filters/date.filter'
 import localizeFilter from '../../filters/localize.filter'
-
 export default {
   name: 'TableBalance',
   data: () => ({
     dataBalance: [],
+    startDate: '',
+    endDate: '',
     searchTypePayment: '',
     searchWhosePayment: '',
     searchDatePayment: '',
@@ -80,10 +93,15 @@ export default {
   },
   computed: {
     filteredData () {
-      return this.dataBalance.filter(balance =>
-        balance.corrected.date.toLowerCase().includes(this.searchDatePayment.toLowerCase()) &&
-        balance.corrected.whosePayment.toLowerCase().includes(this.searchWhosePayment.toLowerCase())
-      )
+      const startDate = this.startDate ? new Date(`${this.startDate}T00:00:00.000Z`) : null
+      const endDate = this.endDate ? new Date(`${this.endDate}T23:59:59.999Z`) : null
+
+      return this.dataBalance.filter(balance => {
+        const date = new Date(balance.corrected.date)
+        const isInDateRange = (!startDate || date >= startDate) && (!endDate || date <= endDate)
+
+        return isInDateRange && balance.corrected.whosePayment.toLowerCase().includes(this.searchWhosePayment.toLowerCase())
+      })
     },
     sortedData () {
       return _.orderBy(this.filteredData, this.sortKey, this.sortOrder)
@@ -98,6 +116,11 @@ export default {
     }
   },
   methods: {
+    resetFilters () {
+      this.searchWhosePayment = ''
+      this.startDate = null
+      this.endDate = null
+    },
     loadData () {
       this.loading = true
       this.$store.dispatch('fetchAllData').then(dataBalance => {
@@ -116,11 +139,9 @@ export default {
     generatePDF () {
       const originalDates = this.sortedData.map(p => p.corrected.date)
       const pdf = new JsPDF()
-
       this.sortedData.forEach((balance) => {
         balance.corrected.redactDate = (new Date(balance.corrected.date).toLocaleDateString())
       })
-
       pdf.autoTable({
         head: [
           [localizeFilter('Date_payment'), localizeFilter('Payment_amount'), localizeFilter('Type_of_payment'), localizeFilter('Whose_payment'), localizeFilter('Commentary'), localizeFilter('author_of_record')]

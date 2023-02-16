@@ -109,7 +109,7 @@
   "Make_a_payment": "Make a payment",
   "Debts_to_date": "Indebtedness to date",
   "History_of_Payments": "history of payments",
-  "Date_payment": "Date payment",
+  "Date_payment": "Date Payment",
   "Payment_amount": "Payment amount",
   "Amount_of_penalty_at_the_time_of_payment": "Amount of penalty at the time of payment",
   "Payment_has_been_made": "Payment has been made",
@@ -195,9 +195,12 @@
   "accepted": "accepted",
   "correctBalance": "Balance change was made in the base",
   "student_payment": "make the student payment",
-  "Type_of_payment": "Type of payment",
-  "Whose_payment": "Whose payment",
+  "Type_of_payment": "Type of Payment",
+  "Whose_payment": "Whose Payment",
   "Commentary": "Commentary",
   "author_of_record": "Author of record",
-  "student_fee": "student fee"
+  "student_fee": "student fee",
+  "From": "From",
+  "To": "To",
+  "Reset_filter": "Reset filter"
 }
