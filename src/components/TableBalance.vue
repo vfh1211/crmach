@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="row">
-      <div class="col s6 m6">
+      <div class="col s2 m2">
+        <input type="date" v-model="searchDatePayment" />
+      </div>
+      <div class="col s4 m4 ">
         <input type="text" v-model="searchWhosePayment" :placeholder="'Whose_payment' | localize" />
       </div>
       <div class="col s10 m10">
@@ -48,7 +51,7 @@
         </tbody>
       </table>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -64,6 +67,7 @@ export default {
     dataBalance: [],
     searchTypePayment: '',
     searchWhosePayment: '',
+    searchDatePayment: '',
     sortKey: 'corrected.date',
     sortOrder: 'asc',
     ascending: true,
@@ -76,7 +80,10 @@ export default {
   },
   computed: {
     filteredData () {
-      return this.dataBalance.filter(balance => balance.corrected.whosePayment.toLowerCase().includes(this.searchWhosePayment.toLowerCase()))
+      return this.dataBalance.filter(balance =>
+        balance.corrected.date.toLowerCase().includes(this.searchDatePayment.toLowerCase()) &&
+        balance.corrected.whosePayment.toLowerCase().includes(this.searchWhosePayment.toLowerCase())
+      )
     },
     sortedData () {
       return _.orderBy(this.filteredData, this.sortKey, this.sortOrder)
