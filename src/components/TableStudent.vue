@@ -1,17 +1,16 @@
 <template>
-
   <div class="col s12 m12 l12">
     <div class="card orange darken-3">
       <div class="card-content white-text" :class="{ 'blue-grey': vacationTime }">
         <div class="card-header">
           <div class="col s2">
-            <img :src="imageSrc" v-if="imageSrc" class="circle responsive-img materialboxed" ref="photoStudentView"
+            <img :src="imageSrc" v-if="imageSrc" class="responsive-img materialboxed" ref="photoStudentView"
               style="width: 120px; height: 120px;">
           </div>
           <span class="card-title">{{ student.name }}
             <template v-if="vacationTime">({{
               'student_break_from_classes' |
-                localize
+              localize
             }})</template></span>
         </div>
         <div class="row">
@@ -50,7 +49,7 @@
                   <td>{{ student.idCard }}</td>
                   <td>{{ student.birthDate }}</td>
                   <td>
-                    <span v-if="!student.maritalStatus"> {{ ''}}</span>
+                    <span v-if="!student.maritalStatus"> {{ '' }}</span>
                     <span v-else> {{ student.maritalStatus | localize }}</span>
                   </td>
                   <td>{{ student.gender | localize }}</td>
@@ -99,7 +98,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
