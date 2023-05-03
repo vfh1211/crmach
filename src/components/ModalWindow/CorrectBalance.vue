@@ -38,6 +38,13 @@
 <script>
 import localizeFilter from '../../../filters/localize.filter'
 import { required } from 'vuelidate/lib/validators'
+
+computed: {
+  activeStudents() {
+    return this.info.filter(student => student.active)
+  }
+}
+
 export default {
   data () {
     return {
@@ -64,33 +71,30 @@ export default {
     correctionValue: { required }
   },
   methods: {
-    async adjustBalance (correction) {
-      this.correctionValue = correction * Math.abs(this.correctionValue)
-      if (this.$v.$invalid) {
-        this.$v.$touch()
-        return
-      }
-      try {
-        this.$store.dispatch('newCorrectBalance',
-          {
-            idAdmin: this.$store.getters.getUid,
-            nameAdmin: this.$store.getters.info.name,
-            initialBalance: Number(this.currentBalance),
-            correctionValue: Number(this.correctionValue),
-            reasonAdjustment: this.reasonAdjustment,
-            date: new Date().toJSON()
-          })
-        const currentBalance = isNaN(Number(this.currentBalance)) ? 0 : Number(this.currentBalance)
-        const correctionValue = isNaN(Number(this.correctionValue)) ? 0 : Number(this.correctionValue)
-        const balance = currentBalance + correctionValue
-        const noUpdateParentBalance = true
-        await this.$store.dispatch('updateBalance', balance)
-        this.$emit('update-balance', balance, noUpdateParentBalance, 'close')
-        this.$message(localizeFilter('correctBalance'))
-      } catch (e) {
-        this.$emit('close')
-      }
-    },
+        async adjustBalance (correction) {
+        this.correctionValue = correction * Math.abs(this.correctionValue)
+        if (this.$v.$invalid) {
+          this.$v.$touch()
+          return
+        }
+        try {
+          const activeStudents = this.activeStudents
+          const initialBalance = activeStudents.reduce((total, student) => total + Number(student.balance), 0)
+          const correctionValue = Number(this.correctionValue)
+          const balance = activeStudents.reduce((total, student) => {
+            const studentBalance = Number(student.balance)
+            const newBalance = studentBalance + (correctionValue / activeStudents.length)
+            return total + newBalance
+          }, 0)
+          const noUpdateParentBalance = true
+          await this.$store.dispatch('updateBalance', balance - initialBalance)
+          this.$emit('update-balance', balance, noUpdateParentBalance, 'close')
+          this.$message(localizeFilter('correctBalance'))
+        } catch (e) {
+          this.$emit('close')
+        }
+      },
+      
     reduceBalance () {
       this.adjustBalance(-1)
     },
