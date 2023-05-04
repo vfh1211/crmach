@@ -51,7 +51,7 @@ export default {
   },
   watch: {
     error (fbError) {
-      this.$error(messages[fbError.code] || 'Something_went_wrong')
+      this.$error(messages[fbError.code] || 'Error de carga')
     }
   }
 }
