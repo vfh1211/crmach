@@ -32,6 +32,11 @@
           {{ 'Login' | localize }}
           <i class="material-icons right">send</i>
         </button>
+
+        <!-- Add the reset password button -->
+        <button class="btn waves-effect waves-light auth-reset" type="button" @click="resetPassword">
+          {{ 'Reset Password' | localize }}
+        </button>
       </div>
 
       <!-- <p class="center">
@@ -68,6 +73,9 @@ export default {
     }
   },
   methods: {
+    resetPassword() {
+      // Implement the logic for resetting the password here
+    }
     async submitHandler () {
       if (this.$v.$invalid) {
         this.$v.$touch()
