@@ -73,9 +73,20 @@ export default {
     }
   },
   methods: {
-    resetPassword() {
-      // Implement the logic for resetting the password here
+   
+   async resetPassword() {
+    try {
+      await firebase.auth().sendPasswordResetEmail(this.email)
+      // Password reset email sent successfully
+      // You can show a success message or redirect the user to a confirmation page
+      console.log('Password reset email sent successfully')
+    } catch (error) {
+      // An error occurred while sending the password reset email
+      // You can show an error message or handle the error as needed
+      console.error('Error sending password reset email:', error)
     }
+  }
+  
     async submitHandler () {
       if (this.$v.$invalid) {
         this.$v.$touch()
