@@ -6,8 +6,14 @@
           <div class="card-content white-text">
             <span class="card-title">{{ 'Balance_Sheet' | localize }}</span>
             <h3 class="center-align">
-              <span v-if="isNaN(balance)" class="default-color"> {{ 0 | currency }} </span>
-              <span v-else :style="{ color: balance < 0 ? 'pink' : 'inherit' }"> {{ balance | currency }} </span>
+              <span
+                v-if="isNaN(balance)"
+                class="default-color"
+              > {{ 0 | currency }} </span>
+              <span
+                v-else
+                :style="{ color: balance < 0 ? 'pink' : 'inherit' }"
+              > {{ balance | currency }} </span>
             </h3>
           </div>
         </div>
@@ -15,32 +21,50 @@
     </div>
     <div class="row">
       <div class="col s2 m2">
-        <button class="btn-large waves-effect waves-light" @click="updateParentBalance()"
-          :disabled="showModal || noUpdateParentBalance">{{
+        <button
+          class="btn-large waves-effect waves-light"
+          :disabled="showModal || noUpdateParentBalance"
+          @click="updateParentBalance()"
+        >
+          {{
             'Update_balance' | localize
-          }}</button>
+          }}
+        </button>
       </div>
       <div class="col s2 m2">
-        <button class="btn-large waves-effect waves-light" @click="showModal = true" :disabled="showModal">{{
-          'Correct_balance' |
-            localize
-        }}</button>
-        <CorrectBalance v-if="showModal" @close="closeModal" @update-balance="updateBalance" />
+        <button
+          class="btn-large waves-effect waves-light"
+          :disabled="showModal"
+          @click="showModal = true"
+        >
+          {{
+            'Correct_balance' |
+              localize
+          }}
+        </button>
+        <CorrectBalance
+          v-if="showModal"
+          @close="closeModal"
+          @update-balance="updateBalance"
+        />
       </div>
       <div class="col s3 m3">
-        <button class="btn-large waves-effect waves-light" @click="$router.push('/record/')" :disabled="showModal">
+        <button
+          class="btn-large waves-effect waves-light"
+          :disabled="showModal"
+          @click="$router.push('/record/')"
+        >
           {{
             'student_payment' |
               localize
-          }}</button>
+          }}
+        </button>
       </div>
     </div>
 
     <LoaderApp v-if="loading" />
     <TableBalance />
-    <div>
-
-    </div>
+    <div />
   </div>
 </template>
 <script>
@@ -48,7 +72,7 @@ import TableBalance from '../components/TableBalance.vue'
 import localizeFilter from '../../filters/localize.filter'
 import CorrectBalance from '../components/ModalWindow/CorrectBalance.vue'
 export default {
-  name: 'balanceSheet',
+  name: 'BalanceSheet',
   metaInfo () {
     return {
       title: this.$title('Balance_Sheet')

@@ -1,16 +1,24 @@
 <template>
   <div class="col s12 m12 l12">
     <div class="card orange darken-3">
-      <div class="card-content white-text" :class="{ 'blue-grey': vacationTime }">
+      <div
+        class="card-content white-text"
+        :class="{ 'blue-grey': vacationTime }"
+      >
         <div class="card-header">
           <div class="col s2">
-            <img :src="imageSrc" v-if="imageSrc" class="responsive-img materialboxed" ref="photoStudentView"
-              style="width: 120px; height: 120px;">
+            <img
+              v-if="imageSrc"
+              ref="photoStudentView"
+              :src="imageSrc"
+              class="responsive-img materialboxed"
+              style="width: 120px; height: 120px;"
+            >
           </div>
           <span class="card-title">{{ student.name }}
             <template v-if="vacationTime">({{
               'student_break_from_classes' |
-              localize
+                localize
             }})</template></span>
         </div>
         <div class="row">
@@ -18,7 +26,7 @@
             <table>
               <thead>
                 <tr>
-                  <th></th>
+                  <th />
                   <th>{{ 'Student' | localize }}</th>
                   <th>{{ 'idCard' | localize }}</th>
                   <th>{{ 'Date_of_birth' | localize }}</th>
@@ -33,15 +41,18 @@
                   <th>{{ 'Monthly_Payment' | localize }}</th>
                   <th>{{ 'Date_next_payment' | localize }}</th>
                   <th>{{ 'Amount_of_fine' | localize }}</th>
-                  <th></th>
+                  <th />
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
                   <td>
-                    <button v-tooltip="'Masters_Concept'" class="btn-floating blue-grey darken-3"
-                      @click="$router.push('/master/' + student.id)">
+                    <button
+                      v-tooltip="'Masters_Concept'"
+                      class="btn-floating blue-grey darken-3"
+                      @click="$router.push('/master/' + student.id)"
+                    >
                       <i class="material-icons">bookmark</i>
                     </button>
                   </td>
@@ -62,9 +73,15 @@
                   <td>{{ student.monthlyPayment | currency }}</td>
                   <td>{{ student.dateNextPayment }}</td>
                   <td>{{ student.amountFine | currency }}</td>
-                  <td> <button v-tooltip="'delete_record'" class="btn-floating pink" @click="delInfoStudent">
+                  <td>
+                    <button
+                      v-tooltip="'delete_record'"
+                      class="btn-floating pink"
+                      @click="delInfoStudent"
+                    >
                       <i class="material-icons">blur_off</i>
-                    </button></td>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -104,6 +121,7 @@
 import localizeFilter from '../../filters/localize.filter'
 export default {
   name: 'TableStudent',
+  props: ['vacationTime'],
   data: () => ({
     loading: true,
     student: [],
@@ -112,7 +130,6 @@ export default {
     yearsOfTraining: null,
     imageSrc: ''
   }),
-  props: ['vacationTime'],
   async mounted () {
     const id = this.$route.params.id
     this.student = await this.$store.dispatch('fetchStudent', id)

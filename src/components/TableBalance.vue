@@ -3,54 +3,93 @@
     <div class="row">
       <div class="col s2 m2">
         <label for="start-date">{{ 'From' | localize }}</label>
-        <input type="date" id="start-date" v-model="startDate" />
+        <input
+          id="start-date"
+          v-model="startDate"
+          type="date"
+        >
       </div>
       <div class="col s2 m2">
         <label for="end-date">{{ 'To' | localize }}</label>
-        <input type="date" id="end-date" v-model="endDate" />
+        <input
+          id="end-date"
+          v-model="endDate"
+          type="date"
+        >
       </div>
       <div class="col s2 m2 ">
         <label for="end-date">{{ 'Whose_payment' | localize }}</label>
-        <input type="text" v-model="searchWhosePayment" :placeholder="'Whose_payment' | localize" />
+        <input
+          v-model="searchWhosePayment"
+          type="text"
+          :placeholder="'Whose_payment' | localize"
+        >
       </div>
 
       <div class="col s2">
-        <button v-tooltip="'Reset_filter'" class="btn-floating btn waves-effect waves-light red" @click="resetFilters"><i
-            class="material-icons">clear</i></button>
+        <button
+          v-tooltip="'Reset_filter'"
+          class="btn-floating btn waves-effect waves-light red"
+          @click="resetFilters"
+        >
+          <i
+            class="material-icons"
+          >clear</i>
+        </button>
       </div>
 
       <div class="col s10 m10">
-        <button class="btn-large waves-effect waves-light" @click="generatePDF()">{{
-          'Download_PDF' | localize
-        }}</button>
+        <button
+          class="btn-large waves-effect waves-light"
+          @click="generatePDF()"
+        >
+          {{
+            'Download_PDF' | localize
+          }}
+        </button>
       </div>
     </div>
     <div class="col s12">
       <table class="highlight">
         <thead>
           <tr>
-            <th @click="sortBy('corrected.date')"><a class="waves-effect waves-orange pointer">{{
-              'Date_payment' | localize
-            }}</a></th>
-            <th @click="sortBy('corrected.correctionValue')"><a class="waves-effect waves-orange pointer">{{
-              'Payment_amount' | localize
-            }}</a></th>
-            <th @click="sortBy('corrected.typePayment')"><a class="waves-effect waves-orange pointer">{{
-              'Type_of_payment' | localize
-            }}</a></th>
-            <th @click="sortBy('corrected.whosePayment')"><a class="waves-effect waves-orange pointer">{{
-              'Whose_payment' | localize
-            }}</a></th>
-            <th @click="sortBy('corrected.reasonAdjustment')"><a class="waves-effect waves-orange pointer">{{
-              'Commentary' | localize
-            }}</a></th>
-            <th @click="sortBy('corrected.nameAdmin')"><a class="waves-effect waves-orange pointer">{{
-              'author_of_record' | localize
-            }}</a></th>
+            <th @click="sortBy('corrected.date')">
+              <a class="waves-effect waves-orange pointer">{{
+                'Date_payment' | localize
+              }}</a>
+            </th>
+            <th @click="sortBy('corrected.correctionValue')">
+              <a class="waves-effect waves-orange pointer">{{
+                'Payment_amount' | localize
+              }}</a>
+            </th>
+            <th @click="sortBy('corrected.typePayment')">
+              <a class="waves-effect waves-orange pointer">{{
+                'Type_of_payment' | localize
+              }}</a>
+            </th>
+            <th @click="sortBy('corrected.whosePayment')">
+              <a class="waves-effect waves-orange pointer">{{
+                'Whose_payment' | localize
+              }}</a>
+            </th>
+            <th @click="sortBy('corrected.reasonAdjustment')">
+              <a class="waves-effect waves-orange pointer">{{
+                'Commentary' | localize
+              }}</a>
+            </th>
+            <th @click="sortBy('corrected.nameAdmin')">
+              <a class="waves-effect waves-orange pointer">{{
+                'author_of_record' | localize
+              }}</a>
+            </th>
           </tr>
         </thead>
         <tbody v-if="dataBalance.length">
-          <tr v-for="balance in sortedData" :key="balance.id">
+          <tr
+            v-for="balance in sortedData"
+            :key="balance.id"
+          >
             <td>{{ balance.corrected.date | date }}</td>
             <td :style="{ color: balance.corrected.correctionValue < 0 ? 'red' : 'inherit' }">
               {{ balance.corrected.correctionValue | currency }}
@@ -63,7 +102,7 @@
         </tbody>
       </table>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -87,10 +126,6 @@ export default {
     sortAscending: true,
     loading: true
   }),
-  mounted () {
-    this.loadData()
-    this.$root.$on('data-updated', this.loadData)
-  },
   computed: {
     filteredData () {
       const startDate = this.startDate ? new Date(`${this.startDate}T00:00:00.000Z`) : null
@@ -114,6 +149,10 @@ export default {
         this.loadData()
       }
     }
+  },
+  mounted () {
+    this.loadData()
+    this.$root.$on('data-updated', this.loadData)
   },
   methods: {
     resetFilters () {

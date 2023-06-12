@@ -4,21 +4,20 @@
       <div class="card-content white-text">
         <span class="card-title">{{ 'Students' | localize }}</span>
         <p class="currency-line">
-          <span>{{ 'Number_of_students_in_arrears' | localize }} <p>{{ this.studentsArrears }}</p></span>
+          <span>{{ 'Number_of_students_in_arrears' | localize }} <p>{{ studentsArrears }}</p></span>
         </p>
         <p class="currency-line">
-          <span>{{ 'Number_of_students_with_no_arrears' | localize }} <p>{{ this.studentsNoArrears }}</p></span>
+          <span>{{ 'Number_of_students_with_no_arrears' | localize }} <p>{{ studentsNoArrears }}</p></span>
         </p>
         <p class="currency-line">
           <span>{{ 'Total_students' | localize }} <p>{{ allStudents }}</p></span>
         </p>
         <p class="currency-line">
-          <span>{{ 'students_not_attending_classes' | localize }} <p>{{ this.studentsVacation }}</p></span>
+          <span>{{ 'students_not_attending_classes' | localize }} <p>{{ studentsVacation }}</p></span>
         </p>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>

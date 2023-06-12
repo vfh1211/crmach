@@ -1,25 +1,46 @@
 <template>
   <LoaderApp v-if="loading" />
-  <p class="center" v-else-if="!students.length">
+  <p
+    v-else-if="!students.length"
+    class="center"
+  >
     {{ 'NoStudents' | localize }}.
-    <router-link to="/contract">{{ 'AddFirst' | localize }}</router-link>
+    <router-link to="/contract">
+      {{ 'AddFirst' | localize }}
+    </router-link>
   </p>
-  <form class="form" v-else @submit.prevent="handleSubmit">
+  <form
+    v-else
+    class="form"
+    @submit.prevent="handleSubmit"
+  >
     <div class="card-content">
       <div class="col s12 m12">
         <div class="row">
-
           <div class="input-field">
             <div class="input-field col s12">
-              <select ref="select" v-model="current" @change="updateCurrent">
-                <option v-for="c in students" :key="c.id" :value="c.id">{{ c.name }}</option>
+              <select
+                ref="select"
+                v-model="current"
+                @change="updateCurrent"
+              >
+                <option
+                  v-for="c in students"
+                  :key="c.id"
+                  :value="c.id"
+                >
+                  {{ c.name }}
+                </option>
               </select>
               <label>{{ 'SelectStudent' | localize }}</label>
             </div>
           </div>
 
           <div class="col s12 m12 l12">
-            <div class="card orange darken-3 bill-card" :class="{ 'blue-grey lighten-5': vacationTime }">
+            <div
+              class="card orange darken-3 bill-card"
+              :class="{ 'blue-grey lighten-5': vacationTime }"
+            >
               <div class="card-content white-text">
                 <div class="card-header">
                   <span class="card-title">{{ name }}
@@ -54,11 +75,18 @@
 
       <div class="input-field col s6">
         <i class="material-icons prefix">account_balance</i>
-        <input id="payment" type="number" v-model.number="payment" :disabled="vacationTime"
-          :class="{ invalid: ($v.payment.$dirty && !$v.payment.minValue) || ($v.payment.$dirty && !$v.payment.required) }">
+        <input
+          id="payment"
+          v-model.number="payment"
+          type="number"
+          :disabled="vacationTime"
+          :class="{ invalid: ($v.payment.$dirty && !$v.payment.minValue) || ($v.payment.$dirty && !$v.payment.required) }"
+        >
         <label for="payment">{{ 'Payment' | localize }}</label>
-        <small class="helper-text invalid"
-          v-if="($v.payment.$dirty && !$v.payment.minValue) || ($v.payment.$dirty && !$v.payment.required)">
+        <small
+          v-if="($v.payment.$dirty && !$v.payment.minValue) || ($v.payment.$dirty && !$v.payment.required)"
+          class="helper-text invalid"
+        >
           {{
             'Minimum_Value' | localize
           }}
@@ -66,16 +94,28 @@
       </div>
       <div class="input-field col s6">
         <i class="material-icons prefix">date_range</i>
-        <input id="dateNextPayment" type="date" v-model.trim="dateNextPayment" :disabled="vacationTime"
-          :class="{ invalid: $v.dateNextPayment.$dirty && !$v.dateNextPayment.required }">
+        <input
+          id="dateNextPayment"
+          v-model.trim="dateNextPayment"
+          type="date"
+          :disabled="vacationTime"
+          :class="{ invalid: $v.dateNextPayment.$dirty && !$v.dateNextPayment.required }"
+        >
         <label for="dateNextPayment">{{ 'Date_next_payment' | localize }}</label>
-        <small class="helper-text invalid" v-if="$v.dateNextPayment.$dirty && !$v.dateNextPayment.required">{{
+        <small
+          v-if="$v.dateNextPayment.$dirty && !$v.dateNextPayment.required"
+          class="helper-text invalid"
+        >{{
           'Message_EnterDatePayment' | localize
         }}</small>
       </div>
       <div class="row">
-        <div class="col s8 offset-s7"><span class="flow-text">
-            <button class="btn waves-effect waves-light" type="submit">
+        <div class="col s8 offset-s7">
+          <span class="flow-text">
+            <button
+              class="btn waves-effect waves-light"
+              type="submit"
+            >
               {{ 'MakePayment' | localize }}
               <i class="material-icons left">send</i>
             </button>
@@ -91,6 +131,7 @@ import { required, minValue } from 'vuelidate/lib/validators'
 import localizeFilter from '../../filters/localize.filter'
 
 export default {
+  props: ['infoStudentId'],
 
   data: () => ({
     daysArrears: null,
@@ -107,19 +148,9 @@ export default {
     temporaryDate: null,
     vacationTime: false
   }),
-  props: ['infoStudentId'],
   validations: {
     dateNextPayment: { required },
     payment: { required, minValue: minValue(500) }
-  },
-  async mounted () {
-    this.currentBalance = Number(await this.$store.dispatch('fetchBalance'))
-    this.currentBalance = isNaN(this.currentBalance) ? 0 : this.currentBalance
-    this.students = await this.$store.dispatch('fetchStudents')
-    this.loading = false
-    if (this.students.length) {
-      this.current = this.students[0].id
-    }
   },
   watch: {
     infoStudentId (newValue) {
@@ -144,6 +175,20 @@ export default {
         window.M.FormSelect.init(this.$refs.select)
         window.M.updateTextFields()
       }, 0)
+    }
+  },
+  async mounted () {
+    this.currentBalance = Number(await this.$store.dispatch('fetchBalance'))
+    this.currentBalance = isNaN(this.currentBalance) ? 0 : this.currentBalance
+    this.students = await this.$store.dispatch('fetchStudents')
+    this.loading = false
+    if (this.students.length) {
+      this.current = this.students[0].id
+    }
+  },
+  destroyed () {
+    if (this.select && this.select.destroy) {
+      this.select.destroy()
     }
   },
   methods: {
@@ -187,11 +232,6 @@ export default {
         this.$router.push('/students')
         this.$v.reset()
       } catch (e) { }
-    }
-  },
-  destroyed () {
-    if (this.select && this.select.destroy) {
-      this.select.destroy()
     }
   }
 }

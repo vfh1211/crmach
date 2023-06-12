@@ -2,16 +2,23 @@
   <div class="app-page">
     <div>
       <LoaderApp v-if="loading" />
-      <div v-else class="row">
+      <div
+        v-else
+        class="row"
+      >
         <div class="switch">
           <label>
-            <input type="checkbox" v-model="vacationTime" @change="updateVacationTime(vacationTime)">
-            <span class="lever"></span>
+            <input
+              v-model="vacationTime"
+              type="checkbox"
+              @change="updateVacationTime(vacationTime)"
+            >
+            <span class="lever" />
             {{ 'student_break_from_classes' | localize }}
           </label>
         </div>
-        <TableStudent :vacationTime="vacationTime" />
-        <Update-student :vacationTime="vacationTime" />
+        <TableStudent :vacation-time="vacationTime" />
+        <Update-student :vacation-time="vacationTime" />
       </div>
     </div>
   </div>
@@ -28,25 +35,25 @@ export default {
       title: this.$title('Student_card')
     }
   },
+  components: {
+    TableStudent,
+    UpdateStudent
+  },
   data: () => ({
     loading: true,
     currency: null,
     vacationTime: false
   }),
-  methods: {
-    updateVacationTime (vacationTime) {
-      this.vacationTime = vacationTime
-    }
-  },
   async mounted () {
     const id = this.$route.params.id
     this.student = await this.$store.dispatch('fetchStudent', id)
     this.vacationTime = this.student.vacationTime
     this.loading = false
   },
-  components: {
-    TableStudent,
-    UpdateStudent
+  methods: {
+    updateVacationTime (vacationTime) {
+      this.vacationTime = vacationTime
+    }
   }
 }
 </script>

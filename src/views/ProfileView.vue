@@ -5,53 +5,91 @@
     </div>
 
     <div class="row">
-      <div class="col s7 push-s5"><span class="flow-text">
-          <form class="form" @submit.prevent="submitHandler">
+      <div class="col s7 push-s5">
+        <span class="flow-text">
+          <form
+            class="form"
+            @submit.prevent="submitHandler"
+          >
             <div class="input-field">
-              <input id="description" type="text" v-model="name"
-                :class="{ invalid: $v.name.$dirty && !$v.name.required }">
+              <input
+                id="description"
+                v-model="name"
+                type="text"
+                :class="{ invalid: $v.name.$dirty && !$v.name.required }"
+              >
               <label for="description">{{ 'Name' | localize }}</label>
-              <small class="helper-text invalid" v-if="$v.name.$dirty && !$v.name.required">{{ 'Message_EnterName' |
-    localize
-}}</small>
+              <small
+                v-if="$v.name.$dirty && !$v.name.required"
+                class="helper-text invalid"
+              >{{ 'Message_EnterName' |
+                localize
+              }}</small>
             </div>
             <div class="switch">
               <label>
                 English
-                <input type="checkbox" v-model="isEsLocale">
-                <span class="lever"></span>
+                <input
+                  v-model="isEsLocale"
+                  type="checkbox"
+                >
+                <span class="lever" />
                 Español
               </label>
             </div>
-            <button class="btn waves-effect waves-light" type="submit">
+            <button
+              class="btn waves-effect waves-light"
+              type="submit"
+            >
               {{ 'Update' | localize }}
               <i class="material-icons right">send</i>
             </button>
           </form>
-        </span></div>
-      <div class="col s5 pull-s7"><span class="flow-text">
-          <div id="ProfileImg" class="col s8">
+        </span>
+      </div>
+      <div class="col s5 pull-s7">
+        <span class="flow-text">
+          <div
+            id="ProfileImg"
+            class="col s8"
+          >
             <div class="row">
-              <img ref="imgProfileView" class="materialboxed" width="340" :src="imageSrc" v-if="imageSrc">
+              <img
+                v-if="imageSrc"
+                ref="imgProfileView"
+                class="materialboxed"
+                width="340"
+                :src="imageSrc"
+              >
               <form action="#">
                 <div class="file-field input-field">
                   <div class="btn">
                     <i class="material-icons left">attach_file</i>
                     <span>{{ 'Home_page_img' | localize }}</span>
-                    <input ref="fileInput" id="
-                  ProfileImg" type="file" accept="image/*" @change="onPhotoChange">
+                    <input
+                      id="
+                  ProfileImg"
+                      ref="fileInput"
+                      type="file"
+                      accept="image/*"
+                      @change="onPhotoChange"
+                    >
                   </div>
                   <div class="file-path-wrapper">
-                    <input id="inputProfileImg" class="file-path validate" type="text">
+                    <input
+                      id="inputProfileImg"
+                      class="file-path validate"
+                      type="text"
+                    >
                   </div>
                 </div>
               </form>
             </div>
 
           </div>
-        </span></div>
+        </span>
+      </div>
     </div>
-
   </div>
 </template>
 

@@ -4,11 +4,8 @@
       <h3>{{ 'Contract' | localize }}</h3>
     </div>
     <section>
-
       <div class="row">
-
         <RegisterNewStudentView />
-
       </div>
     </section>
   </div>
@@ -18,17 +15,17 @@
 import RegisterNewStudentView from '@/components/RegisterNewStudentView.vue'
 
 export default {
-  name: 'contractView',
+  name: 'ContractView',
   metaInfo () {
     return {
       title: this.$title('Menu_Contract')
     }
   },
-  data: () => ({
-    loading: true
-  }),
   components: {
     RegisterNewStudentView
-  }
+  },
+  data: () => ({
+    loading: true
+  })
 }
 </script>

@@ -1,16 +1,22 @@
 <template>
-
   <div class="app-page">
-
     <div>
       <div class="page-title">
         <h3>{{ 'CRM_Title' | localize }}</h3>
       </div>
       <LoaderApp v-if="loading" />
-      <div v-else class="row">
+      <div
+        v-else
+        class="row"
+      >
         <HomeStudents />
         <HomeMoney />
-        <img ref="imgProfileView" class="materialboxed" width="940" v-bind:src="info.imageSrc">
+        <img
+          ref="imgProfileView"
+          class="materialboxed"
+          width="940"
+          :src="info.imageSrc"
+        >
       </div>
     </div>
   </div>

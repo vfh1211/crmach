@@ -4,7 +4,6 @@
     <div class="app-page">
       <div class="row">
         <div class="col s12 m6 l8">
-
           <div class="card-content black-text">
             <div class="card-header">
               <span class="card-title">{{ student.name }} {{ 'History_of_Payments' | localize }}
@@ -16,17 +15,22 @@
             <table>
               <thead>
                 <tr>
-                  <th @click="sortedPayments('date')"><a class="waves-effect waves-orange pointer">{{
-                    'Date_payment' |
-                      localize
-                  }}</a></th>
+                  <th @click="sortedPayments('date')">
+                    <a class="waves-effect waves-orange pointer">{{
+                      'Date_payment' |
+                        localize
+                    }}</a>
+                  </th>
                   <th>{{ 'Payment_amount' | localize }}</th>
                   <th>{{ 'Amount_of_penalty_at_the_time_of_payment' | localize }}</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr v-for="payments of payments" :key="payments.id">
+                <tr
+                  v-for="payments of payments"
+                  :key="payments.id"
+                >
                   <td>{{ payments.paymentStudent.date | date }}</td>
                   <td>{{ payments.paymentStudent.payment | currency }}</td>
                   <td>{{ payments.paymentStudent.fine | currency }}</td>
@@ -34,14 +38,15 @@
               </tbody>
             </table>
           </div>
-
         </div>
         <div class="col s12 m6 l4">
-          <div class="card orange darken-3 bill-card" :class="{ 'blue-grey lighten-5': student.vacationTime }">
+          <div
+            class="card orange darken-3 bill-card"
+            :class="{ 'blue-grey lighten-5': student.vacationTime }"
+          >
             <div class="card-content white-text">
               <span class="card-title">{{ 'Debts_to_date' | localize }}</span>
               <table>
-
                 <thead>
                   <tr>
                     <td>{{ 'Amount_of_fine' | localize }}</td>
@@ -62,8 +67,12 @@
             </div>
           </div>
           <div class="row">
-            <div class="col s8 offset-s7"><span class="flow-text">
-                <button class="btn waves-effect waves-light" @click="$router.push('/record/')">
+            <div class="col s8 offset-s7">
+              <span class="flow-text">
+                <button
+                  class="btn waves-effect waves-light"
+                  @click="$router.push('/record/')"
+                >
                   {{ 'MakePayment' | localize }}
                   <i class="material-icons left">send</i>
                 </button>
@@ -78,7 +87,7 @@
 
 <script>
 export default {
-  name: 'detailView',
+  name: 'DetailView',
   metaInfo () {
     return {
       title: this.$title('Detail_Title')
