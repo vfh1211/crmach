@@ -8,7 +8,7 @@
         >
           <i class="material-icons black-text">dehaze</i>
         </a>
-        <span class="black-text">{{ date | date('datetime') }}</span>
+        <span class="black-text">{{ formattedDate }}</span>
       </div>
 
       <ul class="right hide-on-small-and-down">
@@ -65,27 +65,38 @@ export default {
   computed: {
     name () {
       return this.$store.getters.info.name
+    },
+    formattedDate() {
+        return this.date.toLocaleString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          hour12: true
+        });
+      }
+    },
+    mounted () {
+      this.interval = setInterval(() => {
+        this.date = new Date()
+      }, 1000)
+      this.dropdown = window.M.Dropdown.init(this.$refs.dropdown, {
+        constrainWidth: false
+      })
+    },
+    beforeDestroy () {
+      clearInterval(this.interval)
+      if (this.dropdown && this.dropdown.destroy) {
+        this.dropdown.destroy()
+      }
+    },
+    methods: {
+      async logout () {
+        await this.$store.dispatch('logout')
+        this.$router.push('/login?message=logout')
+      }
     }
-  },
-  mounted () {
-    this.interval = setInterval(() => {
-      this.date = new Date()
-    }, 1000)
-    this.dropdown = window.M.Dropdown.init(this.$refs.dropdown, {
-      constrainWidth: false
-    })
-  },
-  beforeDestroy () {
-    clearInterval(this.interval)
-    if (this.dropdown && this.dropdown.destroy) {
-      this.dropdown.destroy()
-    }
-  },
-  methods: {
-    async logout () {
-      await this.$store.dispatch('logout')
-      this.$router.push('/login?message=logout')
-    }
-  }
 }
 </script>
