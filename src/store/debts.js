@@ -79,6 +79,7 @@ export default {
       try {
         const uid = await dispatch('getUid')
         return await firebase.database().ref(`/users/${uid}/balanceAdjustment`).push({ corrected })
+        return await newRightBalance
       } catch (e) {
         commit('setError', e)
         throw e
@@ -87,7 +88,7 @@ export default {
     async newPayment ({ dispatch, commit }, payment) {
       try {
         const uid = await dispatch('getUid')
-        return await firebase.database().ref(`/users/${uid}/payments`).push({ payment })
+        return await firebase.database().ref(`/users/${uid}/payments`).child({ payment })
       } catch (e) {
         commit('setError', e)
         throw e

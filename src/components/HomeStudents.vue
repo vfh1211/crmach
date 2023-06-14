@@ -4,7 +4,7 @@
       <div class="card-content white-text">
         <span class="card-title">{{ 'Students' | localize }}</span>
         <p class="currency-line">
-          <span>{{ 'Number_of_students_in_arrears' | localize }} <p>{{ studentsArrears }}</p></span>
+          <span>{{ 'Number_of_active_students' | localize }} <p>{{ activeStudents }}</p></span>
         </p>
         <p class="currency-line">
           <span>{{ 'Number_of_students_with_no_arrears' | localize }} <p>{{ studentsNoArrears }}</p></span>
@@ -26,6 +26,7 @@ export default {
   data: () => ({
     loading: true,
     students: [],
+    activeStudents: null,
     studentsArrears: null,
     studentsNoArrears: null,
     studentsVacation: null,
@@ -39,8 +40,16 @@ export default {
       const debtDay = (Math.ceil(+(((new Date().setHours(0)) - (Date.parse(student.dateNextPayment))) / 86400000)) - 1)
       if (debtDay > 0) { this.studentsArrears += 1 }
       if (student.vacationTime === true) { this.studentsVacation += 1 }
-      this.studentsNoArrears = students.length - this.studentsArrears - this.studentsVacation
+      this.studentsNoArrears = students.length - this.studentsArrears //- this.studentsVacation
     }
+
+    this.activeStudents = this.allStudents
+    for(const student of students) {
+      if(student.vacationTime === true){
+        this.activeStudents -= 1
+      }
+    }
+
     this.loading = false
   }
 }
